@@ -1,12 +1,15 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { Task, TaskStatus } from './task.model';
-import { v4 as uuid } from 'uuid';
+import { TaskStatus } from './task-status.enum';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
-import { empty } from 'rxjs';
+import { TaskRepository } from './task.repository';
+import { Task } from './schemas/task.schema';
 
 @Injectable()
 export class TaskService {
+    
+    constructor(private readonly taskRepository: TaskRepository) {}
+/*
     private tasks: Task[] = [];
 
     getAllTasks(){
@@ -34,7 +37,7 @@ export class TaskService {
     }
 
     getTaskById(id: string): Task {
-        const found = this.tasks.find((task) => task.id === id);
+        const found = this.tasks.find((task) => task._id === id);
         if(!this.tasks) throw new NotFoundException();
         else return found;
     }
@@ -43,7 +46,7 @@ export class TaskService {
         const { title, description } = createTaskDto;
         
         const task: Task = {
-            id: uuid(),
+            _id: uuid(),
             title,
             description,
              status: TaskStatus.OPEN,
@@ -60,6 +63,7 @@ export class TaskService {
     }
 
     deleteTask(id: string): void {
-        this.tasks = this.tasks.filter((task) => task.id !== id);
+        this.tasks = this.tasks.filter((task) => task._id !== id);
     }
+*/
 }

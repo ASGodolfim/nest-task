@@ -9,37 +9,19 @@ import { Task } from './schemas/task.schema';
 export class TaskService {
     
     constructor(private readonly taskRepository: TaskRepository) {}
-/*
-    private tasks: Task[] = [];
 
-    getAllTasks(){
-        return this.tasks;
+    async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]>{
+        
+
+        
+        return
     }
 
-    getTasksWithFilters(filterDto: GetTasksFilterDto): Task[]{
-        const { status, search } = filterDto
-        
-        let tasks = this.getAllTasks();
-
-        if(status) {
-            if (status === 'DONE' || status === 'IN_PROGRESS' || status === 'OPEN') tasks = tasks.filter((task) => task.status === status);
-            else throw new BadRequestException
-        }
-
-        if(search) tasks = tasks.filter((task) => {
-            if (task.title.includes(search) || task.description.includes(search)) {
-                if (!tasks[0]) throw new NotFoundException;
-                else return true
-            } else return false
-        })
-        
-        return tasks;
-    }
-*/
     async getTaskById(id: string): Promise<Task> {
         const found = await this.taskRepository.findById(id)
-        if(!found) throw new NotFoundException(`Task with id ${id} Not Found`);
-        else return found;
+        if(!found) {
+            throw new NotFoundException(`Task with id ${id} Not Found`);
+        } else return found;
     }
 
     async createTask(createTaskDto: CreateTaskDto): Promise<Task>{
@@ -51,16 +33,23 @@ export class TaskService {
 
         return task;
     }
-/*
-    updateTaskStatus(id: string, status: TaskStatus){
-        const task = this.getTaskById(id);
+
+    async updateTaskStatus(id: string, status: TaskStatus): Promise<Task>{
+        const task = await this.taskRepository.update(id);
+        
+        if(!task) {
+            throw new NotFoundException(`Task with id ${id} Not Found`);
+        }
+
         task.status = status;
+        
+        task.save()
+
         return task;
     }
-*/
+
     async deleteTask(id: string): Promise<void> {
-        const found = await this.taskRepository.findById(id)
-        if(!found) throw new NotFoundException(`Task with id ${id} Not Found`);     
-        else await this.taskRepository.delete(id);
+        const found = await this.taskRepository.delete(id);
+        console.log(found)
     }
 }

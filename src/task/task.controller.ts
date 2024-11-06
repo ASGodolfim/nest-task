@@ -16,17 +16,17 @@ export class TaskController {
         if (Object.keys(filterDto).length) return this.taskService.getTasksWithFilters(filterDto);
         else return this.taskService.getAllTasks(); 
     }
-
+*/
     @Get('/:id')
-    getTaskById(@Param('id') id:string): Task {
+    getTaskById(@Param('id') id:string): Promise<Task> {
         return this.taskService.getTaskById(id)
     }
 
     @Post()
-    createTask(@Body() createTaskDto: CreateTaskDto): Task{
+    createTask(@Body() createTaskDto: CreateTaskDto): Promise<Task>{
         return this.taskService.createTask(createTaskDto);
     }
-
+/*
     @Patch('/:id/status')
     updateTaskStatus(@Param('id') id: string, @Body() updateTaskStatusDto: updateTaskStatusDto): Task{
         const { status } = updateTaskStatusDto;

@@ -6,13 +6,13 @@ export type TaskDocument = HydratedDocument<Task>;
 
 @Schema()
 export class Task {
-    @Prop()
+    @Prop({required: true})
     title: string;
 
-    @Prop()
+    @Prop({required: true})
     description: string;
 
-    @Prop()
+    @Prop({type: String, enum: TaskStatus, default: 'OPEN'})
     status: TaskStatus
 }
 

@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Task, TaskStatus } from './task.model';
 import { v4 as uuid } from 'uuid';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
+import { empty } from 'rxjs';
 
 @Injectable()
 export class TaskService {
@@ -17,10 +18,16 @@ export class TaskService {
         
         let tasks = this.getAllTasks();
 
-        if(status) tasks = tasks.filter((task) => task.status === status);
+        if(status) {
+            if (status === 'DONE' || status === 'IN_PROGRESS' || status === 'OPEN') tasks = tasks.filter((task) => task.status === status);
+            else throw new BadRequestException
+        }
+
         if(search) tasks = tasks.filter((task) => {
-            if (task.title.includes(search) || task.description.includes(search)) return true;
-            else return false
+            if (task.title.includes(search) || task.description.includes(search)) {
+                if (!tasks[0]) throw new NotFoundException;
+                else return true
+            } else return false
         })
         
         return tasks;

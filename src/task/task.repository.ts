@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Task, TaskDocument } from "./schemas/task.schema";
 import { Model } from "mongoose";
-import { TaskStatus } from "./task-status.enum";
+
 
 @Injectable()
 export class TaskRepository{
@@ -14,5 +14,9 @@ export class TaskRepository{
 
     create(title: string, description: string){
         return this.taskModel.create({title, description})
+    }
+
+    delete(id: string){
+        return this.taskModel.findByIdAndDelete(id);
     }
 }

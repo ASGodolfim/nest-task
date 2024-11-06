@@ -9,7 +9,7 @@ import { Task, TaskSchema } from './task/schemas/task.schema';
 
 @Module({
   imports: [
-    MongooseModule.forRoot('mongodb://localhost/nest'),
+    MongooseModule.forRoot('mongodb://localhost/nest', { dbName: 'task-management' }),
     MongooseModule.forFeature([
       {
         name: Task.name,

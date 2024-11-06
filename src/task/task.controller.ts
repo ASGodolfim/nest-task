@@ -32,10 +32,10 @@ export class TaskController {
         const { status } = updateTaskStatusDto;
         return this.taskService.updateTaskStatus(id, status);
     }
-
+*/
     @Delete('/:id')
-    deleteTask(@Param('id') id :string): void{
+    async deleteTask(@Param('id') id :string): Promise<void>{
         this.taskService.deleteTask(id);
     }
-        */
+    
 }

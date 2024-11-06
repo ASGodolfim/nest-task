@@ -46,7 +46,9 @@ export class TaskService {
         const { title, description } = createTaskDto;
         
         const task = await this.taskRepository.create(title, description);
-        
+
+        await task.save();
+
         return task;
     }
 /*
@@ -55,9 +57,10 @@ export class TaskService {
         task.status = status;
         return task;
     }
-
-    deleteTask(id: string): void {
-        this.tasks = this.tasks.filter((task) => task._id !== id);
-    }
 */
+    async deleteTask(id: string): Promise<void> {
+        const found = await this.taskRepository.findById(id)
+        if(!found) throw new NotFoundException(`Task with id ${id} Not Found`);     
+        else await this.taskRepository.delete(id);
+    }
 }

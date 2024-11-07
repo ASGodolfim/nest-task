@@ -8,11 +8,14 @@ import { GetTasksFilterDto } from "./dto/get-tasks-filter.dto";
 @Injectable()
 export class TaskRepository{
     constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
- /*   
+
     async getTasks(filter: GetTasksFilterDto): Promise<Task[]>{
-        return await
+        const { status, search } = filter
+        let tasks = await this.taskModel.find()
+        if (status) {tasks.filter(el => el.status === status)}
+        return tasks;
     }
-*/
+
     async findById(id: string){
         return await this.taskModel.findById(id)
     }

@@ -12,15 +12,21 @@ import { User } from 'src/auth/schemas/user.schema';
 @UseGuards(AuthGuard())
 export class TaskController {
     constructor(private taskService: TaskService) {}
-
+    
     @Get()
-    getTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
-        return this.taskService.getTasks(filterDto); 
+    getTasks(@Query() filterDto: GetTasksFilterDto, @GetUser() user: User): Promise<Task[]> {
+        return this.taskService.getTasks(filterDto, user); 
     }
 
+    @Get('/all')
+    getAllTasks(@Query() filterDto: GetTasksFilterDto): Promise<Task[]> {
+        return this.taskService.getAllTasks(filterDto); 
+    }
+
+
     @Get('/:id')
-    getTaskById(@Param('id') id:string): Promise<Task> {
-        return this.taskService.getTaskById(id)
+    getTaskById(@Param('id') id:string, @GetUser() user: User): Promise<Task> {
+        return this.taskService.getTaskById(id, user)
     }
 
     @Post()

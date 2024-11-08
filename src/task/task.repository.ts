@@ -10,7 +10,14 @@ import { User } from "src/auth/schemas/user.schema";
 export class TaskRepository{
     constructor(@InjectModel(Task.name) private taskModel: Model<TaskDocument>) {}
 
-    async getTasks(filter: GetTasksFilterDto): Promise<Task[]>{
+    async getTasks(filter: GetTasksFilterDto, user: User): Promise<Task[]>{
+        const { status, search } = filter
+        let tasks = await this.taskModel.find(user)
+        if (status) {tasks.filter(el => el.status === status)}
+        return tasks;
+    }
+
+    async getAllTasks(filter: GetTasksFilterDto): Promise<Task[]>{
         const { status, search } = filter
         let tasks = await this.taskModel.find()
         if (status) {tasks.filter(el => el.status === status)}

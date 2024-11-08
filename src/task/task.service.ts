@@ -1,26 +1,33 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { TaskStatus } from './task-status.enum';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { GetTasksFilterDto } from './dto/get-tasks-filter.dto';
 import { TaskRepository } from './task.repository';
 import { Task } from './schemas/task.schema';
 import { User } from 'src/auth/schemas/user.schema';
+import { GetUser } from 'src/auth/get-user.decorator';
 
 @Injectable()
 export class TaskService {
     
     constructor(private readonly taskRepository: TaskRepository) {}
 
-    async getTasks(filterDto: GetTasksFilterDto): Promise<Task[]>{
-        const tasks = this.taskRepository.getTasks(filterDto);
+    async getTasks(filterDto: GetTasksFilterDto, user: User): Promise<Task[]>{
+        const tasks = this.taskRepository.getTasks(filterDto, user);
         return tasks
     }
 
-    async getTaskById(id: string): Promise<Task> {
+    async getAllTasks(filterDto: GetTasksFilterDto): Promise<Task[]>{
+        const tasks = this.taskRepository.getAllTasks(filterDto);
+        return tasks
+    }
+
+    async getTaskById(id: string, user: User): Promise<Task> {
         const found = await this.taskRepository.findById(id)
         if(!found) {
             throw new NotFoundException(`Task with id ${id} Not Found`);
-        } else return found;
+        } else if (found.users !== user) throw new NotFoundException(`Task with id ${id} Not Found`);
+        return found;
     }
 
     async createTask(createTaskDto: CreateTaskDto, user: User): Promise<Task>{

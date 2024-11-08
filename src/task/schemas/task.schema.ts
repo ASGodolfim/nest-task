@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument, mongo } from 'mongoose';
 import { TaskStatus } from '../task-status.enum';
 import { User } from 'src/auth/schemas/user.schema';
+import { Exclude } from 'class-transformer';
 
 export type TaskDocument = HydratedDocument<Task>;
 
@@ -18,8 +19,9 @@ export class Task {
 
     @Prop({
         type: mongoose.Schema.ObjectId,
-        ref: 'User'
+        ref: 'User',
     })
+    @Exclude({toPlainOnly: true})
     users: User; 
 }
 

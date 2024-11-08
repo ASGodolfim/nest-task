@@ -21,6 +21,11 @@ export class AuthController {
     signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<User>{
         return this.userService.signUp(authCredentialsDto);
     }
+    
+    @Post()
+    signIn(@Body() authCredentialsDto: AuthCredentialsDto): Promise<string>{
+        return this.userService.signIn(authCredentialsDto);
+    }
 /*
     @Patch('/:id/status')
     updateTaskStatus(@Param('id') id: string, @Body() updateTaskStatusDto: updateTaskStatusDto): Promise<Task>{

@@ -5,6 +5,7 @@ import { Model } from "mongoose";
 
 
 
+
 @Injectable()
 export class UserRepository{
     constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
@@ -16,6 +17,10 @@ export class UserRepository{
 
     async findById(id: string){
         return await this.userModel.findById(id)
+    }
+
+    async findOne(search: string){
+        return await this.userModel.findOne({search})
     }
 
     async create(username: string, password: string){

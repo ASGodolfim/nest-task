@@ -3,6 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Task, TaskDocument } from "./schemas/task.schema";
 import { Model } from "mongoose";
 import { GetTasksFilterDto } from "./dto/get-tasks-filter.dto";
+import { User } from "src/auth/schemas/user.schema";
 
 
 @Injectable()
@@ -20,8 +21,8 @@ export class TaskRepository{
         return await this.taskModel.findById(id)
     }
 
-    async create(title: string, description: string){
-        return await this.taskModel.create({title, description})
+    async create(title: string, description: string, user: User){
+        return await this.taskModel.create({title, description, user})
     }
 
     async delete(id: string){
